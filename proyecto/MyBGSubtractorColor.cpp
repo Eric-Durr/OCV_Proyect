@@ -24,7 +24,7 @@ MyBGSubtractorColor::MyBGSubtractorColor(VideoCapture vc) {
 	means = vector<Scalar>(max_samples);
 
 	h_low = 12;
-  h_up = 7;
+    h_up = 7;
 	l_low = 30;
 	l_up = 40;
 	s_low = 80;
@@ -116,11 +116,23 @@ void  MyBGSubtractorColor::ObtainBGMask(cv::Mat frame, cv::Mat &bgmask) {
 
         // CODIGO 1.2
 				Mat hls_frame;
+				Mat dst
 
 				ctvColor(frame, hls_frame, CV_BGR2HLS);
-					means[i].inRange(hls_frame,0,255, dst)
+				for (int i = 0; i < samples_positions.size()-1; i++) {
+				  	scalar low;
+					  	   low[0] = means[i][0] - h_low;
+				  		   low[1] = means[i][1] - l_low;
+				  		   low[2] = means[i][2] - s_low;
+				  
+				  	scalar high;
+					  	   high[0] = means[i][0] + h_up;
+				  		   high[1] = means[i][1] + l_up;
+				  		   high[2] = means[i][2] + s_up;
+				  
+				  		inRange(hls_frame, low , high , dst)
+				
 				}
-
 
         // Definir los rangos máximos y mínimos para cada canal (HLS)
         // umbralizar las imágenes para cada rango y sumarlas para
