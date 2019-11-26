@@ -12,6 +12,9 @@
 using namespace cv;
 using namespace std;
 
+//findContours -> devuelve una imagen con una linea de color con el contorno detectado (generalmente más de uno)(lo devuelve como secuencias de píxeles)
+
+
 HandGesture::HandGesture() {
 	
 }
@@ -37,10 +40,13 @@ double HandGesture::getAngle(Point s, Point e, Point f) {
 void HandGesture::FeaturesDetection(Mat mask, Mat output_img) {
 	
 	vector<vector<Point> > contours;
-	Mat temp_mask;
+	Mat temp_mask; //copia de la máscara  //-> falla si es un negro puro (se soluciona pintando un circulito en una esquina)
 	mask.copyTo(temp_mask);
-	int index = -1;
 
+
+	int index = -1;
+// hacemos find contours
+// entramos en un bucle y cogemos el mas largo
         // CODIGO 3.1
         // detección del contorno de la mano y selección del contorno más largo
         //...

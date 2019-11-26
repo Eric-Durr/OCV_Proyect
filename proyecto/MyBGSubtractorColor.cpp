@@ -115,29 +115,42 @@ void MyBGSubtractorColor::LearnModel() {
 void  MyBGSubtractorColor::ObtainBGMask(cv::Mat frame, cv::Mat &bgmask) {
 
         // CODIGO 1.2
-				Mat hls_frame;
-				Mat dst
-
-				ctvColor(frame, hls_frame, CV_BGR2HLS);
-				for (int i = 0; i < samples_positions.size()-1; i++) {
-				  	scalar low;
-					  	   low[0] = means[i][0] - h_low;
-				  		   low[1] = means[i][1] - l_low;
-				  		   low[2] = means[i][2] - s_low;
-				  
-				  	scalar high;
-					  	   high[0] = means[i][0] + h_up;
-				  		   high[1] = means[i][1] + l_up;
-				  		   high[2] = means[i][2] + s_up;
-				  
-				  		inRange(hls_frame, low , high , dst)
-				
-				}
-
+		
         // Definir los rangos máximos y mínimos para cada canal (HLS)
         // umbralizar las imágenes para cada rango y sumarlas para
         // obtener la máscara final con el fondo eliminado
 
         //...
+
+				Mat hls_frame;
+				Mat dst
+				Mat result(frame.rows, frame.cols, CV_8U, Scalar(0)); 
+				Scalar low;
+				Scalar high;
+					 
+				
+				ctvColor(frame, hls_frame, CV_BGR2HLS);
+				for (int i = 0; i < samples_positions.size()-1; i++) {
+					
+					((means[i][0] - h_low) < 0) ? (low[0] = 0) : (means[i][0] - h_low); 
+					
+					((means[i][1] - l_low) < 0) ? (low[1] = 0) : (means[i][1] - l_low);
+					
+					((means[i][2] - s_low) < 0) ? (low[2] = 0) : (means[i][2] - s_low);
+					  	     
+				  
+				  	((means[i][0] + h_up) > 255) ? (low[0] = 255) : (means[i][0] + h_low); 
+					
+					((means[i][1] + l_up) > 255) ? (low[1] = 255) : (means[i][1] + l_low);
+					
+					((means[i][2] + s_up) > 255) ? (low[2] = 255) : (means[i][2] + s_low);
+					  	     
+				  
+				  	inRange(hls_frame, low , high , dst);
+
+					result = result + dst;
+				}
+				
+				result.copyTo(bgmask);
 
 }
