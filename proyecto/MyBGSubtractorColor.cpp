@@ -101,7 +101,7 @@ void MyBGSubtractorColor::LearnModel() {
 				for(int i = 0; i < samples_positions.size()-1; i++){
 					Mat roi = hls_frame(Rect(samples_positions[i].x, samples_positions[i].y,
 						      SAMPLE_SIZE, SAMPLE_SIZE)); //coordenadas x,y , ancho y alto
-					scalar m = mean(roi); //calculamos la media
+					Scalar m = mean(roi); //calculamos la media
 					means[i] = m; //lo insertamos en nuestro vector de medias
 				}
 
