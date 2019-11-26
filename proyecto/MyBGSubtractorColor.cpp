@@ -97,7 +97,7 @@ void MyBGSubtractorColor::LearnModel() {
 	}
 
         // CODIGO 1.1
-				ctvColor(frame, hls_frame, CV_BGR2HLS);
+				cvtColor(frame, hls_frame, CV_BGR2HLS);
 				for(int i = 0; i < samples_positions.size()-1; i++){
 					Mat roi = hls_frame(Rect(samples_positions[i].x, samples_positions[i].y,
 						      SAMPLE_SIZE, SAMPLE_SIZE)); //coordenadas x,y , ancho y alto
@@ -123,14 +123,14 @@ void  MyBGSubtractorColor::ObtainBGMask(cv::Mat frame, cv::Mat &bgmask) {
         //...
 
 				Mat hls_frame;
-				Mat dst
+				Mat dst;
 				Mat result(frame.rows, frame.cols, CV_8U, Scalar(0)); 
 				Scalar low;
 				Scalar high;
 					 
 				
-				ctvColor(frame, hls_frame, CV_BGR2HLS);
-				for (int i = 0; i < samples_positions.size()-1; i++) {
+				cvtColor(frame, hls_frame, CV_BGR2HLS);
+				for (int i = 0; i < max_samples; i++) {
 					
 					((means[i][0] - h_low) < 0) ? (low[0] = 0) : (means[i][0] - h_low); 
 					
