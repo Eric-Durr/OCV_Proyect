@@ -48,12 +48,14 @@ int main(int argc, char** argv)
 	namedWindow("Fondo");
 
         // creamos el objeto para la substracci�n de fondo
+	MyBGSubtractorColor mascara(cap);
 
 	// creamos el objeto para el reconocimiento de gestos
 
 	// iniciamos el proceso de obtenci�n del modelo del fondo
 
 
+	mascara.LearnModel();
 	for (;;)
 	{
 		cap >> frame;
@@ -68,19 +70,31 @@ int main(int argc, char** argv)
 
 		// obtenemos la m�scara del fondo con el frame actual
 
+		mascara.ObtainBGMask(frame, bgmask);
                 // CODIGO 2.1
                 // limpiar la m�scara del fondo de ruido
                 //...
+		
+		//Filtro de la mediana. Reduce el ruido. Colorea una zona con el color que más predomine reduciendo el ruido
+		medianBlur(bgmask, bgmask, 5); //Esto a lo mejor no nos hace falta
+		
+		int dilation_size = 0.7;
 
-
+		Mat element = getStructuringElement(MORPH_RECT,Size(2 * dilation_size + 1, 2 * dilation_size + 1), Point(dilation_size, dilation_size));
+		
+		erode(bgmask, bgmask , element);
+		dilate(bgmask,bgmask, element);
+ 
 		// deteccion de las caracter�sticas de la mano
-
+		//findContours(dst, contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE);
+		//drawContours(out_frame, contours, , cv::Scalar(255, 0, 0), 2, 8, vector<Vec4i>(), 0, Point());
+		
                 // mostramos el resultado de la sobstracci�n de fondo
-
+			
                 // mostramos el resultado del reconocimento de gestos
 
 		imshow("Reconocimiento", frame);
-
+		imshow("Fondo", bgmask);
 
 	}
 
