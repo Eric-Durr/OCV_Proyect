@@ -69,7 +69,7 @@ void HandGesture::FeaturesDetection(Mat mask, Mat output_img) {
 	//obtener el convex hull	
 	vector<int> hull;
 	convexHull(contours[index], hull);
-	
+	 
 	// pintar el convex hull
 	Point pt0 = contours[index][hull[hull.size()-1]];
 	for (int i = 0; i < hull.size(); i++)
@@ -78,7 +78,6 @@ void HandGesture::FeaturesDetection(Mat mask, Mat output_img) {
 		line(output_img, pt0, pt, Scalar(0, 0, 255), 2, CV_AA);
 		pt0 = pt;
 	}
-	/*
         //obtener los defectos de convexidad
 	vector<Vec4i> defects;
 	convexityDefects(contours[index], hull, defects);
@@ -90,15 +89,14 @@ void HandGesture::FeaturesDetection(Mat mask, Mat output_img) {
 			Point e = contours[index][defects[i][1]];
 			Point f = contours[index][defects[i][2]];
 			float depth = (float)defects[i][3] / 256.0;
-			double angle = getAngle(s, e, f);
-		
+			double angle = getAngle(s, e, f);	
                         // CODIGO 3.2
                         // filtrar y mostrar los defectos de convexidad
                         //...
-			
-			circle(output_img, f, 1, cv::Scalar(255, 255, 255), 1);	
+			circle(output_img, f, 1, cv::Scalar(0, 255, 0), 1);	
+						
 
                 }
-	
-	*/	
+
+
 }
