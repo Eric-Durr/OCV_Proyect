@@ -90,28 +90,18 @@ int main(int argc, char** argv)
 		
 		dilate(bgmask,bgmask, element);
 		erode(bgmask, bgmask , element);
-		vector<vector<Point> > contours;
-		circle(bgmask, Point(0,0), 1, cv::Scalar(255, 0, 0), 1);
-		findContours(bgmask, contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE);
-
-		int maxContour = contours[0].size();
-		int index = 0;
- 		for(int i = 0; i < contours.size()-1; i++){
-			if(maxContour < contours[i].size()){
-				maxContour = contours[i].size();
-				index = i;
-			}
-		}
+		
+ 		
 		// deteccion de las caracter�sticas de la mano
 		
-		drawContours(frame, contours, index , cv::Scalar(255, 0, 0), 2, 8, vector<Vec4i>(), 0, Point());
 		
                 // mostramos el resultado de la sobstracci�n de fondo
-			
+		imshow("Fondo", bgmask);	
                 // mostramos el resultado del reconocimento de gestos
-
+		HandGesture reconocimiento;
+		reconocimiento.FeaturesDetection(bgmask, frame);
 		imshow("Reconocimiento", frame);
-		imshow("Fondo", bgmask);
+		
 
 	}
 

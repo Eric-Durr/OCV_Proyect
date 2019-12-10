@@ -42,18 +42,29 @@ void HandGesture::FeaturesDetection(Mat mask, Mat output_img) {
 	vector<vector<Point> > contours;
 	Mat temp_mask; //copia de la máscara  //-> falla si es un negro puro (se soluciona pintando un circulito en una esquina)
 	mask.copyTo(temp_mask);
+	
+	circle(bgmask, Point(0,0), 1, cv::Scalar(255, 0, 0), 1);
 
+		int index = -1;
+	// hacemos find contours
+		findContours(temp_mask, contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE);
 
-	int index = -1;
-// hacemos find contours
-// entramos en un bucle y cogemos el mas largo
+	// entramos en un bucle y cogemos el mas largo
         // CODIGO 3.1
         // detección del contorno de la mano y selección del contorno más largo
         //...
-
+		
+		int maxContour = contours[0].size();
+		for(int i = 0; i < contours.size()-1; i++){
+			if(maxContour < contours[i].size()){
+				maxContour = contours[i].size();
+				index = i;
+			}
+		}
         // pintar el contorno
         //...
-	
+		drawContours(output_img, contours, index , cv::Scalar(255, 0, 0), 2, 8, vector<Vec4i>(), 0, Point());
+		
 
 	//obtener el convex hull	
 	vector<int> hull;
