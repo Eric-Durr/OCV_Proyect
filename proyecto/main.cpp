@@ -82,12 +82,29 @@ int main(int argc, char** argv)
 
 		Mat element = getStructuringElement(MORPH_RECT,Size(2 * dilation_size + 1, 2 * dilation_size + 1), Point(dilation_size, dilation_size));
 		
-		erode(bgmask, bgmask , element);
+		dilate(bgmask,bgmask, element);	
 		dilate(bgmask,bgmask, element);
- 
+		dilate(bgmask,bgmask, element);
+		erode(bgmask, bgmask , element);
+		medianBlur(bgmask, bgmask, 5); //Esto a lo mejor no nos hace falta
+		
+		dilate(bgmask,bgmask, element);
+		erode(bgmask, bgmask , element);
+		vector<vector<Point> > contours;
+		circle(bgmask, Point(0,0), 1, cv::Scalar(255, 0, 0), 1);
+		findContours(bgmask, contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE);
+
+		int maxContour = contours[0].size();
+		int index = 0;
+ 		for(int i = 0; i < contours.size()-1; i++){
+			if(maxContour < contours[i].size()){
+				maxContour = contours[i].size();
+				index = i;
+			}
+		}
 		// deteccion de las caracter�sticas de la mano
-		//findContours(dst, contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE);
-		//drawContours(out_frame, contours, , cv::Scalar(255, 0, 0), 2, 8, vector<Vec4i>(), 0, Point());
+		
+		drawContours(frame, contours, index , cv::Scalar(255, 0, 0), 2, 8, vector<Vec4i>(), 0, Point());
 		
                 // mostramos el resultado de la sobstracci�n de fondo
 			
