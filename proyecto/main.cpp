@@ -96,8 +96,10 @@ int main(int argc, char** argv)
 		
 		
                 // mostramos el resultado de la sobstracci�n de fondo
+		circle(frame, Point(1,1), 3, cv::Scalar(255, 255, 255), 3);	
 		imshow("Fondo", bgmask);	
-                // mostramos el resultado del reconocimento de gestos
+                
+		// mostramos el resultado del reconocimento de gestos
 		HandGesture reconocimiento;
 		reconocimiento.FeaturesDetection(bgmask, frame);
 		imshow("Reconocimiento", frame);

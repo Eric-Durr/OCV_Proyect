@@ -43,7 +43,6 @@ void HandGesture::FeaturesDetection(Mat mask, Mat output_img) {
 	Mat temp_mask; //copia de la máscara  //-> falla si es un negro puro (se soluciona pintando un circulito en una esquina)
 	mask.copyTo(temp_mask);
 	
-	circle(bgmask, Point(0,0), 1, cv::Scalar(255, 0, 0), 1);
 
 		int index = -1;
 	// hacemos find contours
@@ -64,11 +63,12 @@ void HandGesture::FeaturesDetection(Mat mask, Mat output_img) {
         // pintar el contorno
         //...
 		drawContours(output_img, contours, index , cv::Scalar(255, 0, 0), 2, 8, vector<Vec4i>(), 0, Point());
-		
 
+		
+	
 	//obtener el convex hull	
 	vector<int> hull;
-	convexHull(contours[index],hull);
+	convexHull(contours[index], hull);
 	
 	// pintar el convex hull
 	Point pt0 = contours[index][hull[hull.size()-1]];
@@ -78,12 +78,12 @@ void HandGesture::FeaturesDetection(Mat mask, Mat output_img) {
 		line(output_img, pt0, pt, Scalar(0, 0, 255), 2, CV_AA);
 		pt0 = pt;
 	}
-	
+	/*
         //obtener los defectos de convexidad
 	vector<Vec4i> defects;
 	convexityDefects(contours[index], hull, defects);
 		
-		
+			
 		int cont = 0;
 		for (int i = 0; i < defects.size(); i++) {
 			Point s = contours[index][defects[i][0]];
@@ -95,8 +95,10 @@ void HandGesture::FeaturesDetection(Mat mask, Mat output_img) {
                         // CODIGO 3.2
                         // filtrar y mostrar los defectos de convexidad
                         //...
+			
+			circle(output_img, f, 1, cv::Scalar(255, 255, 255), 1);	
 
                 }
 	
-		
+	*/	
 }
