@@ -82,6 +82,17 @@ void HandGesture::FeaturesDetection(Mat mask, Mat output_img) {
 		
 	vector<Vec4i> defects;
 	convexityDefects(contours[index], hull, defects);	
+	Rect boundRect = boundingRect(contours[index]);
+	float maxSize;
+	float minSize;
+
+	if (boundRect.height > boundRect.width){
+		maxSize = boundRect.height;
+		minSize = boundRect.width;
+	}else{
+		maxSize = boundRect.width;
+		minSize = boundRect.height;
+	}
         
 		
 			
@@ -95,20 +106,37 @@ void HandGesture::FeaturesDetection(Mat mask, Mat output_img) {
         // CODIGO 3.2
         // filtrar y mostrar los defectos de convexidad
         //...
-		if(angle < 120.0 && depth > 100.0)			
+		if(angle < 120.0 && depth > maxSize*0.23)			
 		circle(output_img, f, 3, cv::Scalar(0, 255, 0), 5);
 			
     }
 	// Pintar rectangulo del area minima del contorno (boundingRect)
 		
-
-	Rect boundRect = boundingRect(contours[index]);
-		 
-	if ((boundRect.height / boundRect.width) < 1.2) {
-		rectangle(output_img, boundRect, Scalar(0,0,255), 2);
-	}else{
-		rectangle(output_img, boundRect, Scalar(0,255,0), 2);
+		 	
+	if(maxSize/minSize < 1.2 ){
+	rectangle(output_img, boundRect, Scalar(255,255,0), 2);
+		
+	} else {
+	 rectangle(output_img, boundRect, Scalar(255,0,255), 2);
 	}
+
+	switch (defects.size())
+	{
+	case 1: putText(output_img, "2", Point(100,100),3,3,Scalar(0,0,0) ); 
+			break;
 	
+	case 2: putText(output_img, "3", Point(100,100),3,3,Scalar(0,0,0) ); 
+			break;
+	
+	case 3: putText(output_img, "4", Point(100,100),3,3,Scalar(0,0,0) ); 
+			break;
+	
+	case 4: putText(output_img, "5", Point(100,100),3,3,Scalar(0,0,0) ); 
+			break;
+
+	default:
+		
+		break;
+	}
 
 }
