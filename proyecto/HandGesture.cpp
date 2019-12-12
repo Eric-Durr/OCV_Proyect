@@ -103,9 +103,12 @@ void HandGesture::FeaturesDetection(Mat mask, Mat output_img) {
 		
 
 	Rect boundRect = boundingRect(contours[index]);
-		 {
-	rectangle(output_img, boundRect, Scalar(0,0,255), 2);
-	
+		 
+	if ((boundRect.height / boundRect.width) < 1.2) {
+		rectangle(output_img, boundRect, Scalar(0,0,255), 2);
+	}else{
+		rectangle(output_img, boundRect, Scalar(0,255,0), 2);
+	}
 	
 
 }
