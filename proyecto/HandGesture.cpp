@@ -41,10 +41,10 @@ void HandGesture::FeaturesDetection(Mat mask, Mat output_img) {
 	
 	vector<vector<Point> > contours;
 	Mat temp_mask; //copia de la máscara  //-> falla si es un negro puro (se soluciona pintando un circulito en una esquina)
-	mask.copyTo(temp_mask);
 	
-
-		int index = -1;
+	mask.copyTo(temp_mask);
+		
+		int index = 0;
 	// hacemos find contours
 		findContours(temp_mask, contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE);
 
@@ -54,7 +54,7 @@ void HandGesture::FeaturesDetection(Mat mask, Mat output_img) {
         //...
 		
 		int maxContour = contours[0].size();
-		for(int i = 0; i < contours.size()-1; i++){
+		for(int i = 1; i < contours.size(); i++){
 			if(maxContour < contours[i].size()){
 				maxContour = contours[i].size();
 				index = i;
@@ -79,24 +79,33 @@ void HandGesture::FeaturesDetection(Mat mask, Mat output_img) {
 		pt0 = pt;
 	}
         //obtener los defectos de convexidad
+		
 	vector<Vec4i> defects;
-	convexityDefects(contours[index], hull, defects);
+	convexityDefects(contours[index], hull, defects);	
+        
 		
 			
-		int cont = 0;
-		for (int i = 0; i < defects.size(); i++) {
-			Point s = contours[index][defects[i][0]];
-			Point e = contours[index][defects[i][1]];
-			Point f = contours[index][defects[i][2]];
-			float depth = (float)defects[i][3] / 256.0;
-			double angle = getAngle(s, e, f);	
-                        // CODIGO 3.2
-                        // filtrar y mostrar los defectos de convexidad
-                        //...
-			circle(output_img, f, 1, cv::Scalar(0, 255, 0), 1);	
-						
+	int cont = 0;
+	for (int i = 0; i < defects.size(); i++) {
+		Point s = contours[index][defects[i][0]];
+		Point e = contours[index][defects[i][1]];
+		Point f = contours[index][defects[i][2]];
+		float depth = (float)defects[i][3] / 256.0;
+		double angle = getAngle(s, e, f);	
+        // CODIGO 3.2
+        // filtrar y mostrar los defectos de convexidad
+        //...
+		if(angle < 120.0 && depth > 100.0)			
+		circle(output_img, f, 3, cv::Scalar(0, 255, 0), 5);
+			
+    }
+	// Pintar rectangulo del area minima del contorno (boundingRect)
+		
 
-                }
-
+	Rect boundRect = boundingRect(contours[index]);
+		 {
+	rectangle(output_img, boundRect, Scalar(0,0,255), 2);
+	
+	
 
 }

@@ -59,7 +59,7 @@ int main(int argc, char** argv)
 	for (;;)
 	{
 		cap >> frame;
-		//flip(frame, frame, 1);
+		flip(frame, frame, 1);
 		if (frame.empty())
 		{
 			printf("Le�do frame vac�o\n");
@@ -95,15 +95,17 @@ int main(int argc, char** argv)
 		// deteccion de las caracter�sticas de la mano
 		
 		
-                // mostramos el resultado de la sobstracci�n de fondo
-		circle(frame, Point(1,1), 3, cv::Scalar(255, 255, 255), 3);	
+                // mostramos el resultado de la sobstracci�n de fondo	
+	        circle(bgmask, Point(0,0), 2, cv::Scalar(255, 255, 255), -1);
 		imshow("Fondo", bgmask);	
-                
+        
+	
 		// mostramos el resultado del reconocimento de gestos
 		HandGesture reconocimiento;
 		reconocimiento.FeaturesDetection(bgmask, frame);
-		imshow("Reconocimiento", frame);
-		
+	
+	        imshow("Reconocimiento", frame);
+	
 
 	}
 
@@ -112,3 +114,4 @@ int main(int argc, char** argv)
 	cap.release();
 	return 0;
 }
+ 
