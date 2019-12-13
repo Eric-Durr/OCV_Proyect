@@ -139,8 +139,8 @@ void HandGesture::FeaturesDetection(Mat mask, Mat output_img, int flag) {
 		case 4: putText(output_img, "5", Point(100,100),3,3,Scalar(0,0,0) ); 
 				break;
 
-		default:
-			if(maxSize/minSize < 1.2  && fPointNum == 0){
+		case 0:
+			if(maxSize/minSize < 1.4 ){
 				rectangle(output_img, boundRect, Scalar(255,255,0), 2);
 		
 				putText(output_img, "0", Point(100,100),3,3,Scalar(0,0,0) ); 
@@ -153,6 +153,8 @@ void HandGesture::FeaturesDetection(Mat mask, Mat output_img, int flag) {
 			}
 				
 			break;
+		default:
+		break;
 	}
 
 }
