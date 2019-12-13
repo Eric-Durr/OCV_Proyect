@@ -66,7 +66,11 @@ int main(int argc, char** argv)
 			continue;
 		}
 		int c = cvWaitKey(40);
+		
+		int paint;
 		if ((char)c == 'q') break;
+		if ((char)d == 'd') paint = 1;
+		if ((char)c == 'e') paint = 0;
 
 		// obtenemos la m�scara del fondo con el frame actual
 
@@ -102,7 +106,7 @@ int main(int argc, char** argv)
 	
 		// mostramos el resultado del reconocimento de gestos
 		HandGesture reconocimiento;
-		reconocimiento.FeaturesDetection(bgmask, frame);
+		reconocimiento.FeaturesDetection(bgmask, frame, paint);
 	
 	        imshow("Reconocimiento", frame);
 	

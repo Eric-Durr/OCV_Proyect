@@ -13,12 +13,12 @@ class HandGesture {
 
 public:
 	HandGesture();
-	void FeaturesDetection(cv::Mat mask, cv::Mat output_img);
+	void FeaturesDetection(cv::Mat mask, cv::Mat output_img, int flag);
 	
 
 private:
 	double getAngle(cv::Point s, cv::Point e, cv::Point f);
-	
+	//void draw(cv::Point center);
 	
 
 };

@@ -37,7 +37,7 @@ double HandGesture::getAngle(Point s, Point e, Point f) {
 	if (angle < -CV_PI) angle += 2 * CV_PI;
 	return (angle * 180.0/CV_PI);
 }
-void HandGesture::FeaturesDetection(Mat mask, Mat output_img) {
+void HandGesture::FeaturesDetection(Mat mask, Mat output_img, int flag) {
 	
 	vector<vector<Point> > contours;
 	Mat temp_mask; //copia de la máscara  //-> falla si es un negro puro (se soluciona pintando un circulito en una esquina)
@@ -83,6 +83,8 @@ void HandGesture::FeaturesDetection(Mat mask, Mat output_img) {
 	vector<Vec4i> defects;
 	convexityDefects(contours[index], hull, defects);	
 	Rect boundRect = boundingRect(contours[index]);
+	//punto central
+	Point boundRect_center((boundRect.tl().x + boundRect.br().x)/2,(boundRect.tl().y + boundRect.br().y)/2); 
 	float maxSize;
 	float minSize;
 
@@ -110,6 +112,7 @@ void HandGesture::FeaturesDetection(Mat mask, Mat output_img) {
 		circle(output_img, f, 3, cv::Scalar(0, 255, 0), 5);
 			
     }
+		circle(output_img, boundRect_center, 3, cv::Scalar(0, 255, 0), 5);
 	// Pintar rectangulo del area minima del contorno (boundingRect)
 		
 		 	
@@ -117,7 +120,7 @@ void HandGesture::FeaturesDetection(Mat mask, Mat output_img) {
 	rectangle(output_img, boundRect, Scalar(255,255,0), 2);
 		
 	} else {
-	 rectangle(output_img, boundRect, Scalar(255,0,255), 2);
+	rectangle(output_img, boundRect, Scalar(255,0,255), 2);
 	}
 
 	switch (defects.size())
@@ -126,10 +129,10 @@ void HandGesture::FeaturesDetection(Mat mask, Mat output_img) {
 			break;
 	
 	case 2: putText(output_img, "3", Point(100,100),3,3,Scalar(0,0,0) ); 
-			break;
+			break;flag
 	
-	case 3: putText(output_img, "4", Point(100,100),3,3,Scalar(0,0,0) ); 
-			break;
+	case 3: putTexflag0,100),3,3,Scalar(0,0,0) ); 
+			break;flag
 	
 	case 4: putText(output_img, "5", Point(100,100),3,3,Scalar(0,0,0) ); 
 			break;
@@ -139,4 +142,12 @@ void HandGesture::FeaturesDetection(Mat mask, Mat output_img) {
 		break;
 	}
 
+
+	if (flag = 1) {
+		circle(output_img, boundRect_center, 3, cv::Scalar(0, 255, 0), 5);
+	}
+	
+
 }
+
+
