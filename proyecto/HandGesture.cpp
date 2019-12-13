@@ -85,7 +85,7 @@ void HandGesture::FeaturesDetection(Mat mask, Mat output_img) {
 	Rect boundRect = boundingRect(contours[index]);
 	float maxSize;
 	float minSize;
-
+	Point rectcenter((boundRect.tl().x + boundingRect.br().x) / 2, (boundRect.tl().y + boundingRect.br().y) / 2);
 	if (boundRect.height > boundRect.width){
 		maxSize = boundRect.height;
 		minSize = boundRect.width;
@@ -97,6 +97,9 @@ void HandGesture::FeaturesDetection(Mat mask, Mat output_img) {
 		
 			
 	int cont = 0;
+	int fPointNum = 0;
+	vector<Point> far_points;
+	vector<Point> start_points;
 	for (int i = 0; i < defects.size(); i++) {
 		Point s = contours[index][defects[i][0]];
 		Point e = contours[index][defects[i][1]];
@@ -106,37 +109,42 @@ void HandGesture::FeaturesDetection(Mat mask, Mat output_img) {
         // CODIGO 3.2
         // filtrar y mostrar los defectos de convexidad
         //...
-		if(angle < 120.0 && depth > maxSize*0.23)			
-		circle(output_img, f, 3, cv::Scalar(0, 255, 0), 5);
-			
+		if(angle < 120.0 && depth > maxSize*0.23){	
+		  	fPointNum ++;		
+			circle(output_img, f, 3, cv::Scalar(0, 255, 0), 5);
+		}
     }
 	// Pintar rectangulo del area minima del contorno (boundingRect)
 		
-		 	
-	if(maxSize/minSize < 1.2 ){
-	rectangle(output_img, boundRect, Scalar(255,255,0), 2);
+	 rectangle(output_img, boundRect, Scalar(0,255,255), 2);
+	 
 		
-	} else {
-	 rectangle(output_img, boundRect, Scalar(255,0,255), 2);
-	}
-
-	switch (defects.size())
+	
+	
+	switch (fPointNum)
 	{
-	case 1: putText(output_img, "2", Point(100,100),3,3,Scalar(0,0,0) ); 
-			break;
-	
-	case 2: putText(output_img, "3", Point(100,100),3,3,Scalar(0,0,0) ); 
-			break;
-	
-	case 3: putText(output_img, "4", Point(100,100),3,3,Scalar(0,0,0) ); 
-			break;
-	
-	case 4: putText(output_img, "5", Point(100,100),3,3,Scalar(0,0,0) ); 
-			break;
+		case 1: putText(output_img, "2", Point(100,100),3,3,Scalar(0,0,0) ); 
+				break;
 
-	default:
+		case 2: putText(output_img, "3", Point(100,100),3,3,Scalar(0,0,0) ); 
+				break;
+
+		case 3: putText(output_img, "4", Point(100,100),3,3,Scalar(0,0,0) ); 
+				break;
+
+		case 4: putText(output_img, "5", Point(100,100),3,3,Scalar(0,0,0) ); 
+				break;
+
+		default:
+			if(maxSize/minSize < 1.2 ){
+				rectangle(output_img, boundRect, Scalar(255,255,0), 2);
 		
-		break;
+				putText(output_img, "0", Point(100,100),3,3,Scalar(0,0,0) ); 
+			} else {
+				putText(output_img, "1", Point(100,100),3,3,Scalar(0,0,0) ); 
+			}
+				
+			break;
 	}
 
 }
