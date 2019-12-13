@@ -85,7 +85,7 @@ void HandGesture::FeaturesDetection(Mat mask, Mat output_img, int flag) {
 	Rect boundRect = boundingRect(contours[index]);
 	float maxSize;
 	float minSize;
-	Point rectcenter((boundRect.tl().x + boundingRect.br().x) / 2, (boundRect.tl().y + boundingRect.br().y) / 2);
+	Point rectcenter((boundRect.tl().x + boundRect.br().x) / 2, (boundRect.tl().y + boundRect.br().y) / 2);
 	if (boundRect.height > boundRect.width){
 		maxSize = boundRect.height;
 		minSize = boundRect.width;
@@ -98,23 +98,26 @@ void HandGesture::FeaturesDetection(Mat mask, Mat output_img, int flag) {
 			
 	int cont = 0;
 	int fPointNum = 0;
-	vector<Point> far_points;
-	vector<Point> start_points;
 	for (int i = 0; i < defects.size(); i++) {
 		Point s = contours[index][defects[i][0]];
 		Point e = contours[index][defects[i][1]];
 		Point f = contours[index][defects[i][2]];
 		float depth = (float)defects[i][3] / 256.0;
-		double angle = getAngle(s, e, f);	
-        // CODIGO 3.2
+		double angle = getAngle(s, e, f);
+
+	    // CODIGO 3.2
         // filtrar y mostrar los defectos de convexidad
         //...
+		
 		if(angle < 120.0 && depth > maxSize*0.23){	
 		  	fPointNum ++;		
-			circle(output_img, f, 3, cv::Scalar(0, 255, 0), 5);
+			circle(output_img, f, 3, cv::Scalar(0, 255, 0), 5); //vector<Point> far_points;
+	vector<Point> start_points;
+	
 		}
     }
-		circle(output_img, boundRect_center, 3, cv::Scalar(0, 255, 0), 5);
+	
+	circle(output_img, rectcenter, 3, cv::Scalar(0, 255, 0), 5);
 	// Pintar rectangulo del area minima del contorno (boundingRect)
 		
 	 rectangle(output_img, boundRect, Scalar(0,255,255), 2);
@@ -141,18 +144,16 @@ void HandGesture::FeaturesDetection(Mat mask, Mat output_img, int flag) {
 				rectangle(output_img, boundRect, Scalar(255,255,0), 2);
 		
 				putText(output_img, "0", Point(100,100),3,3,Scalar(0,0,0) ); 
+	          	Point oldrectcenter = rectcenter; 
+			  	line(output_img, rectcenter , oldrectcenter, Scalar(0, 0, 255), 2, CV_AA);
+				
+	
 			} else {
 				putText(output_img, "1", Point(100,100),3,3,Scalar(0,0,0) ); 
 			}
 				
 			break;
 	}
-
-
-	if (flag = 1) {
-		circle(output_img, boundRect_center, 3, cv::Scalar(0, 255, 0), 5);
-	}
-	
 
 }
 
